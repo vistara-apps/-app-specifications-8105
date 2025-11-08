@@ -1,5 +1,4 @@
-import React from 'react'
-import { CheckCircle, XCircle, ExternalLink, X } from 'lucide-react'
+import { CheckCircle, XCircle, Clock, ExternalLink, X } from 'lucide-react'
 import { Button } from './ui/Button'
 
 interface TransactionStatusProps {
@@ -15,26 +14,27 @@ export function TransactionStatus({ status, txSignature, onClose }: TransactionS
     switch (status) {
       case 'pending':
         return {
+          icon: Clock,
           title: 'Transaction Pending',
-          message: 'Confirming your swap on Solana...',
-          icon: (
-            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-          ),
-          color: 'border-primary',
+          message: 'Your swap is being processed...',
+          color: 'text-warning',
+          bgColor: 'bg-warning/10',
         }
       case 'success':
         return {
-          title: 'Swap Successful!',
-          message: 'Your transaction has been confirmed',
-          icon: <CheckCircle className="w-8 h-8 text-success" />,
-          color: 'border-success',
+          icon: CheckCircle,
+          title: 'Transaction Successful',
+          message: 'Your swap has been completed successfully!',
+          color: 'text-success',
+          bgColor: 'bg-success/10',
         }
       case 'error':
         return {
+          icon: XCircle,
           title: 'Transaction Failed',
-          message: 'Your swap could not be completed. Please try again.',
-          icon: <XCircle className="w-8 h-8 text-error" />,
-          color: 'border-error',
+          message: 'Something went wrong. Please try again.',
+          color: 'text-error',
+          bgColor: 'bg-error/10',
         }
       default:
         return null
@@ -44,32 +44,36 @@ export function TransactionStatus({ status, txSignature, onClose }: TransactionS
   const config = getStatusConfig()
   if (!config) return null
 
+  const Icon = config.icon
+
   return (
-    <div className={`glass-effect rounded-lg border ${config.color} p-4 animate-slide-up`}>
-      <div className="flex items-start space-x-3">
-        {config.icon}
-        <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-sm">{config.title}</h4>
-          <p className="text-sm text-text-muted mt-1">{config.message}</p>
-          {txSignature && (
-            <div className="mt-2 flex items-center space-x-2">
-              <a
-                href={`https://solscan.io/tx/${txSignature}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1 text-xs text-primary hover:text-primary/80"
+    <div className={`rounded-lg p-4 ${config.bgColor} border border-current/20 animate-fade-in`}>
+      <div className="flex items-start justify-between">
+        <div className="flex items-start space-x-3">
+          <Icon className={`w-5 h-5 mt-0.5 ${config.color}`} />
+          <div className="flex-1">
+            <h4 className={`font-medium ${config.color}`}>{config.title}</h4>
+            <p className="text-sm text-text-muted mt-1">{config.message}</p>
+            
+            {txSignature && status === 'success' && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mt-2 p-0 h-auto text-primary hover:text-primary-hover"
+                onClick={() => window.open(`https://solscan.io/tx/${txSignature}`, '_blank')}
               >
-                <span>View on Solscan</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
-          )}
+                <span className="text-sm">View on Solscan</span>
+                <ExternalLink className="w-3 h-3 ml-1" />
+              </Button>
+            )}
+          </div>
         </div>
+        
         <Button
           variant="ghost"
           size="sm"
           onClick={onClose}
-          className="p-1 opacity-70 hover:opacity-100"
+          className="p-1 h-auto"
         >
           <X className="w-4 h-4" />
         </Button>

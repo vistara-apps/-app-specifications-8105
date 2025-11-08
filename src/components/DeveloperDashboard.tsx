@@ -1,4 +1,3 @@
-import React from 'react'
 import { TrendingUp, Users, Zap, DollarSign, Activity, AlertTriangle } from 'lucide-react'
 
 export function DeveloperDashboard() {
@@ -110,7 +109,7 @@ export function DeveloperDashboard() {
         <div className="space-y-3">
           {recentTransactions.map((tx) => (
             <div key={tx.id} className="flex items-center justify-between p-3 bg-surface/50 rounded-md">
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <div className={`w-2 h-2 rounded-full ${
                   tx.status === 'success' ? 'bg-success' : 'bg-error'
                 }`} />

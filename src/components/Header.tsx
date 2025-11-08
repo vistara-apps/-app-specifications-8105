@@ -1,4 +1,3 @@
-import React from 'react'
 import { Code, BarChart3, Droplets, Book } from 'lucide-react'
 import { Button } from './ui/Button'
 
